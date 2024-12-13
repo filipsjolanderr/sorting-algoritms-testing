@@ -1,6 +1,8 @@
 package murraco;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -21,6 +23,65 @@ public class SortingAlgorithmsTest {
     final Integer[] data = {4, 3, 0, 11, 7, 5, 15, 12, 99, 1};
     BubbleSort.bubbleSort(data);
     assertEquals("[0, 1, 3, 4, 5, 7, 11, 12, 15, 99]", Arrays.toString(data));
+  }
+
+  private static class ReferenceEqualString implements Comparable<ReferenceEqualString>{
+    private final String value;
+
+    public ReferenceEqualString(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public int compareTo(ReferenceEqualString o) {
+      return this.value.compareTo(o.value);
+    }
+  }
+
+  private static class CompareToCountingInteger implements Comparable<CompareToCountingInteger>{
+    private final Integer value;
+    private int counter;
+
+    public CompareToCountingInteger(Integer value){
+      this.value = value;
+    }
+
+    @Override
+    public int compareTo(CompareToCountingInteger o) {
+      counter++;
+      return this.value.compareTo(o.value);
+    }
+
+    public int getCounter() {
+      return this.counter;
+    }
+  }
+
+  @Test
+  public void testBubbleSortStability() {
+    ReferenceEqualString a = new ReferenceEqualString("a");
+    ReferenceEqualString b = new ReferenceEqualString("a");
+
+    assertEquals(0, a.compareTo(b));
+    assertNotEquals(a.hashCode(), b.hashCode());
+    
+    final ReferenceEqualString[] data = {a, b};
+    final ReferenceEqualString[] sortedData = Arrays.copyOf(data, 2);
+    BubbleSort.bubbleSort(sortedData);
+    assertArrayEquals(data, sortedData);
+  }
+
+  @Test
+  public void testBubbleSortNumberOfComparisons() {
+    CompareToCountingInteger a = new CompareToCountingInteger(3);
+    CompareToCountingInteger b = new CompareToCountingInteger(1);
+    CompareToCountingInteger c = new CompareToCountingInteger(2);
+
+    final CompareToCountingInteger[] data = {a,b,c};
+    BubbleSort.bubbleSort(data);
+    assertEquals(1, a.getCounter());
+    assertEquals(1, b.getCounter());
+    assertEquals(2, c.getCounter());
   }
 
   @Test
