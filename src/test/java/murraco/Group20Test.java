@@ -1,4 +1,5 @@
-package test.java.murraco;
+package murraco;
+
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -131,5 +132,43 @@ public class Group20Test {
 
     assertEquals(java.util.Arrays.toString(expected), java.util.Arrays.toString(array));
   }
+
+ //Black Box 
+
+ @Test
+ public void testQuicksortString(){
+   final String[] data = {"Banana","Apple", "Cherry", "Date"};
+   Quicksort.quickSort(data);
+   assertEquals("[Apple, Banana, Cherry, Date]", Arrays.toString(data));
+ }
+
+ @Test
+ public void testQuicksortNegative(){
+   final Integer[] data = {8 ,-2,-4, -1};
+   Quicksort.quickSort(data);
+   assertEquals("[-4, -2, -1, 8]", Arrays.toString(data));
+ }
+
+ @Test
+ public void testQuicksortZeros(){
+   final Integer[] data = {8900 ,0004,-0, 22,  1};
+   Quicksort.quickSort(data);
+   assertEquals("[0, 1, 4, 22, 8900]", Arrays.toString(data));
+ }
+
+ @Test
+ public void testQuicksortEmptyArrayValue() {
+     final Integer[] data = {};
+     Quicksort.quickSort(data); //
+     assertEquals("[]", Arrays.toString(data)); 
+ }
+
+ @Test
+ public void testQuicksortEquals(){
+   final Integer[] data = {0, 0, 0, 3, 2, 2, 2, 2, 2, 1};
+   Quicksort.quickSort(data);
+   assertEquals("[0, 0, 0, 1, 2, 2, 2, 2, 2, 3]", Arrays.toString(data));
+ }
+
     
 }
