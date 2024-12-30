@@ -1,12 +1,14 @@
 package murraco;
 
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -20,8 +22,10 @@ import murraco.SelectionSort;
 import java.util.Arrays;
 
 public class Group20Test {
+  // ---------- Surviving mutant-based tests ----------
 
-    private static class ReferenceEqualString implements Comparable<ReferenceEqualString>{
+    // Help class to validate references
+  private static class ReferenceEqualString implements Comparable<ReferenceEqualString>{
     private final String value;
 
     public ReferenceEqualString(String value) {
@@ -34,6 +38,7 @@ public class Group20Test {
     }
   }
 
+  // Help class to count number of value comparisons
   private static class CompareToCountingInteger implements Comparable<CompareToCountingInteger>{
     private final Integer value;
     private int counter;
@@ -53,6 +58,7 @@ public class Group20Test {
     }
   }
 
+  // Changed conditional boundary, line 9 in BubbleSort class
   @Test
   public void testBubbleSortStability() {
     ReferenceEqualString a = new ReferenceEqualString("a");
@@ -67,6 +73,7 @@ public class Group20Test {
     assertArrayEquals(data, sortedData);
   }
  
+  // Replaced integer subtraction with addition
   @Test
   public void testBubbleSortNumberOfComparisons() {
     CompareToCountingInteger a = new CompareToCountingInteger(3);
@@ -133,8 +140,41 @@ public class Group20Test {
     assertEquals(java.util.Arrays.toString(expected), java.util.Arrays.toString(array));
   }
 
- //Black Box 
+  // Test Quicksort with two elements with same value
+  // Changed conditional boundary, line 23 in QuickSort class
+  @Test
+  public void testQuickSortSameElements() {
+    CompareToCountingInteger a = new CompareToCountingInteger(5);
+    CompareToCountingInteger b = new CompareToCountingInteger(5);
+    final CompareToCountingInteger[] data = {a, b};
+    Quicksort.quickSort(data);
 
+    // Should always only be 1 comparison when having two elements in array
+    assertEquals(1, a.getCounter() + b.getCounter());
+  }
+   
+  // Test picking pivot index in QuickSort method in correct range
+  // Replaced integer addition with subtraction, line 34 in Quicksort class
+  @Test
+  public void testQuickSortPivotIndexBoundaries() {
+    Integer start = 0;
+    Integer end = 3;
+
+    Integer[] expected = {0, 1, 2, 3};
+    Set<Integer> indices = new HashSet<>(Arrays.asList(expected));
+    Set<Integer> pickedIndices = new HashSet<>();
+
+    for(int i = 0; i < 10_000; i++) {
+      Integer index = Quicksort.pickPivotIndex(start, end);
+      assertTrue(indices.contains(index));
+      pickedIndices.add(index);
+    }
+
+    // Ensure all expected indices have been picked at least once
+    assertEquals(indices, pickedIndices);
+  }
+
+ // -------------------- Black Box ---------------------
  @Test
  public void testQuicksortString(){
    final String[] data = {"Banana","Apple", "Cherry", "Date"};
@@ -169,6 +209,4 @@ public class Group20Test {
    Quicksort.quickSort(data);
    assertEquals("[0, 0, 0, 1, 2, 2, 2, 2, 2, 3]", Arrays.toString(data));
  }
-
-    
 }
