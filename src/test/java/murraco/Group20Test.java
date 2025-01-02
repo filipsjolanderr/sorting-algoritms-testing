@@ -175,12 +175,17 @@ public class Group20Test {
   }
 
  // -------------------- Black Box ---------------------
+
+ // Testing string arrays
  @Test
  public void testQuicksortString(){
    final String[] data = {"Banana","Apple", "Cherry", "Date"};
    Quicksort.quickSort(data);
    assertEquals("[Apple, Banana, Cherry, Date]", Arrays.toString(data));
  }
+
+ 
+ // Testing arrays with negative values
 
  @Test
  public void testQuicksortNegative(){
@@ -189,6 +194,9 @@ public class Group20Test {
    assertEquals("[-4, -2, -1, 8]", Arrays.toString(data));
  }
 
+ 
+ // Testing arrays with zeros 
+
  @Test
  public void testQuicksortZeros(){
    final Integer[] data = {8900 ,0004,-0, 22,  1};
@@ -196,12 +204,18 @@ public class Group20Test {
    assertEquals("[0, 1, 4, 22, 8900]", Arrays.toString(data));
  }
 
+
+ // Testing empty arrays
+
  @Test
  public void testQuicksortEmptyArrayValue() {
      final Integer[] data = {};
      Quicksort.quickSort(data); //
      assertEquals("[]", Arrays.toString(data)); 
  }
+
+
+ // Testing arrays with equal numbers
 
  @Test
  public void testQuicksortEquals(){
